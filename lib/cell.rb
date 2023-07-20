@@ -23,5 +23,13 @@ class Cell
     @fired_upon = true
   end
 
-  
+  def render(reveal_ship = false)
+    if fired_upon?
+      return "M" if empty?
+      return "X" if ship.sunk?
+      return "H"
+    end
+    return "S" if reveal_ship && !empty?
+    "."
+  end
 end
