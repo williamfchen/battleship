@@ -13,12 +13,12 @@ RSpec.describe Board do
     it "can initialize" do
       expect(@board).to be_an_instance_of(Board)
     end
-  
+    
     it "has readable attributes" do
-      expect(@board.cells).to eq({...})
+      expect(@board.cells).to be_a Hash
     end
   end
-
+  
   describe "#valid_coordinate?" do
     it "can determine if a coordinate is within the board's boundaries" do
       expect(@board.valid_coordinate?("A1")).to be true
