@@ -20,17 +20,21 @@ RSpec.describe Cell do
     end
 
     it '.place_ship' do
-      expect(cell.ship).to eq(@cruiser)
+      cell.place_ship(cruiser)
+      expect(cell.ship).to eq(cruiser)
       expect(cell.empty?).to be false
     end
 
     it '.fired_upon?' do
+
+      cell.place_ship(cruiser)
       expect(cell.fired_upon?).to be false
     end
 
     it '.fire_upon' do
+      cell.place_ship(cruiser)
       cell.fire_upon
-      expect(ell.ship.health).to eq(2)
+      expect(cell.ship.health).to eq(2)
       expect(cell.fired_upon?).to be true
     end
   end
