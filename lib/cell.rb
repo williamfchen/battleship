@@ -26,6 +26,7 @@ class Cell
   def render(reveal_ship = false)
     if fired_upon?
       return "M" if empty?
+      # @ship ?
       return "X" if ship.sunk?
       return "H"
     end
