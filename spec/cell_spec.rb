@@ -26,7 +26,6 @@ RSpec.describe Cell do
     end
 
     it '.fired_upon?' do
-
       cell.place_ship(cruiser)
       expect(cell.fired_upon?).to be false
     end
