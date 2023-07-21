@@ -24,7 +24,7 @@ RSpec.describe Cell do
       expect(cell.empty?).to be false
     end
 
-    it '.fired_upon' do
+    it '.fired_upon?' do
       expect(cell.fired_upon?).to be false
     end
 
