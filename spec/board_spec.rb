@@ -28,4 +28,22 @@ RSpec.describe Board do
       expect(@board.valid_coordinate?("A22")).to be false
     end
   end
+
+  describe "#valid_palcement?" do
+    it "can determine if a ship is placed properly on the board" do
+      expect(@board.valid_placement?(@cruiser, ["A1", "A2"])).to be false
+      expect(@board.valid_placement?(@submarine, ["A2", "A3", "A4"])).to be false
+
+      expect(@board.valid_placement?(@cruiser, ["A1", "A2", "A4"])).to be false
+      expect(@board.valid_placement?(@submarine, ["A1", "C1"]).to be false)
+      expect(@board.valid_placement?(@cruiser, ["A3", "A2", "A1"])).to be false
+      expect(@board.valid_placement?(@submarine, ["C1", "B1"]).to be false)
+
+      expect(@board.valid_placement?(@cruiser, ["A1", "B2", "C3"])).to be false
+      expect(@board.valid_placement?(@submarine, ["C2", "D3"])).to be false
+
+      expect(@board.valid_placement?(@submarine, ["A1", "A2"])).to true
+      expect(@board.valid_placement?(@cruiser, ["B1", "C1", "D1"])).to true
+    end
+  end
 end
