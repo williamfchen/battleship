@@ -16,8 +16,19 @@ class Board
     cells
   end
 
-  def valid_coordinate?(potential_coord)
-    cells.any? { |cell| potential_coord }
+  def valid_coordinate?(coordinate)
+    cells.key?(coordinate)
   end
 
+  def valid_placement?(ship, coordinates)
+    if coordinates.length == ship.length
+      if coordinates.each do |coor|
+        coor.valid_coordinate?
+      else
+        false
+      end
+    else 
+      false
+    end
+  end
 end
