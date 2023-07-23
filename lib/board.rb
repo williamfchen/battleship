@@ -21,4 +21,13 @@ class Board
 
   end
 
+  def place(ship, coordinates)
+    # if valid_placement
+    require 'pry';binding.pry
+      
+    # end
+  end
+
+
+
 end

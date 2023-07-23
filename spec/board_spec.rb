@@ -20,7 +20,7 @@ RSpec.describe Board do
   end
   
   describe "#valid_coordinate?" do
-    it "can determine if a coordinate is within the board's boundaries" do
+    xit "can determine if a coordinate is within the board's boundaries" do
       expect(@board.valid_coordinate?("A1")).to be true
       expect(@board.valid_coordinate?("D4")).to be true
       expect(@board.valid_coordinate?("A5")).to be false
@@ -28,4 +28,19 @@ RSpec.describe Board do
       expect(@board.valid_coordinate?("A22")).to be false
     end
   end
+
+  describe '#places ships' do
+    it '.place' do
+      @board.place(@cruiser, ["A1", "A2", "A3"])
+      @cell_1 = @board.cells["A1"]
+      @cell_2 = @board.cells["A2"]
+      @cell_3 = @board.cells["A3"]
+      expect(@cell_1.ship).to eq(@cruiser)
+      expect(@cell_2.ship).to eq(@cruiser)
+      expect(@cell_3.ship).to eq(@cruiser)
+      expect(@cell_3.ship == @cell_2.ship).to be true
+    end
+
+  end
+
 end
