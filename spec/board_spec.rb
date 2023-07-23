@@ -29,17 +29,31 @@ RSpec.describe Board do
     end
   end
 
-  describe '#places ships' do
-    it '.place' do
+  describe '#places ships and renders' do
+    before(:each) do
       @board.place(@cruiser, ["A1", "A2", "A3"])
       @cell_1 = @board.cells["A1"]
       @cell_2 = @board.cells["A2"]
       @cell_3 = @board.cells["A3"]
+      @submarine = Ship.new("Submarine", 2) 
+    end
+
+    it '.place' do
       expect(@cell_1.ship).to eq(@cruiser)
       expect(@cell_2.ship).to eq(@cruiser)
       expect(@cell_3.ship).to eq(@cruiser)
       expect(@cell_3.ship == @cell_2.ship).to be true
     end
+
+    it 'doesnt overlap' do
+      # add ship.nil? conditional to valid_placement
+      # expect(@board.valid_placement?(@submarine, ["A1", "B1"])).to be false
+    end
+
+    it '.renders' do
+      @board.render
+    end
+
 
   end
 

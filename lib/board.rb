@@ -27,6 +27,17 @@ class Board
     # end
   end
 
-
-
+  def render(reveal_ships = false)
+    board_render = "  " + ('A'..'D').to_a.join(" ") + "\n"
+    ('1'..'4').each do |row|
+      board_render += row + " " # Add row number
+      ('A'..'D').each do |column|
+        coordinate = "#{column}#{row}"
+        cell = cells[coordinate]
+        board_render += cell.render(reveal_ships) + " "
+      end
+      board_render += "\n"
+    end
+    puts board_render
+  end
 end
