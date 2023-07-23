@@ -3,11 +3,10 @@ class Board
 
   def initialize
     @cells = create_cells
-    # require 'pry';binding.pry
   end
 
   def create_cells
-    cells= {}
+    cells = {}
     ("A".."D").each do |letter|
       (1..4).each do |num|
         coordinate = "#{letter}#{num}"
@@ -17,8 +16,8 @@ class Board
     cells
   end
 
-  def valid_coordinate?
-
+  def valid_coordinate?(potential_coord)
+    cells.any? { |cell| potential_coord }
   end
 
 end
