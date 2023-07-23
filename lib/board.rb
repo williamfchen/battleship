@@ -21,14 +21,8 @@ class Board
   end
 
   def valid_placement?(ship, coordinates)
-    if coordinates.length == ship.length
-      if coordinates.each do |coor|
-        coor.valid_coordinate?
-      else
-        false
-      end
-    else 
-      false
-    end
+    return false unless ship.is_a?(Ship) && coordinates.is_a?(Array) && coordinates.length == ship.length
+
+    
   end
 end
