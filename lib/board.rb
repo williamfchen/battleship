@@ -23,8 +23,7 @@ class Board
 
   def place(ship, coordinates)
     # if valid_placement
-    require 'pry';binding.pry
-      
+      coordinates.each { |coordinate| cells[coordinate].place_ship(ship) }
     # end
   end
 
