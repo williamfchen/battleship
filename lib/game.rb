@@ -56,12 +56,36 @@ class Game
     end
   end
   
-  def computer_place_ships
-  end
-
   def get_ship_coordinates(ship)
     puts "Enter #{ship.length} coordinates(e.g. A1) for the #{ship.name}, separated with a space:"
     gets.chomp.split(" ")
+  end
+
+  def computer_place_ships
+    cruiser = Ship.new("Cruiser", 3)
+    submarine = Ship.new("Submarine", 2)
+    ships = [cruiser, submarine]
+    ships.each do |ship|
+      loop do
+        coordinates = generate_random_coordinates_for_ship(ship)
+        if @computer_board.valid_placement?(ship, coordinates)
+          @computer_board.place(ship, coordinates)
+          break
+        end
+      end
+    end
+  end
+
+  def generate_random_coordinates_for_ship(ship)
+    starting_coor = generate_random_coordinate
+    direction = rand(2)
+    coordinates = [starting_coor]
+
+    if direction == 0
+      (ship.length - 1).times do |coor|
+        
+      end
+    end
   end
 
   def player_turn
