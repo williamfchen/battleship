@@ -39,7 +39,7 @@ class Game
       loop do
         coordinates = get_ship_coordinates(ship)
         if @player_board.valid_placement?(ship, coordinates)
-          @player_boardb.place(ship, coordinates)
+          @player_board.place(ship, coordinates)
           break
         else
           puts "Invalid placement. Try again."
@@ -49,7 +49,7 @@ class Game
   end
 
   def get_ship_coordinates(ship)
-    puts "Enter the coordinates for the #{ship.name} (#{ship.length} spaces):"
+    puts "Enter #{ship.length} coordinates for the #{ship.name}, separated with a space:"
     gets.chomp.split(" ")
   end
 
