@@ -22,6 +22,25 @@ class Board
     cells.key?(coordinate)
   end
 
+
+  def place(ship, coordinates)
+      coordinates.each { |coordinate| cells[coordinate].place_ship(ship) } #if valid_placement?
+  end
+
+  def render(reveal_ships = false)
+    board_render = "  " + ('A'..'D').to_a.join(" ") + "\n"
+    ("1".."4").each do |row|
+      board_render += row + " "
+      ("A".."D").each do |column|
+        coordinate = "#{column}#{row}"
+        cell = cells[coordinate]
+        board_render += cell.render(reveal_ships) + " "
+      end
+      board_render += "\n"
+    end
+    puts board_render
+
+
   def valid_placement?(ship, coordinates)
     return false unless ship.is_a?(Ship) && coordinates.is_a?(Array) && coordinates.length == ship.length
 
@@ -54,5 +73,6 @@ class Board
     else
       false
     end
+
   end
 end
