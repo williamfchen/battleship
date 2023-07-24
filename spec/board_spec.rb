@@ -46,15 +46,13 @@ RSpec.describe Board do
     end
 
     it 'doesnt overlap' do
-      # add ship.nil? conditional to valid_placement
+      # add cell.empty? conditional to valid_placement
       # expect(@board.valid_placement?(@submarine, ["A1", "B1"])).to be false
     end
 
     it '.renders' do
       @board.render
     end
-
-
   end
 
 end

@@ -3,7 +3,6 @@ class Board
 
   def initialize
     @cells = create_cells
-    # require 'pry';binding.pry
   end
 
   def create_cells
@@ -17,21 +16,19 @@ class Board
     cells
   end
 
-  def valid_coordinate?
-
+  def valid_coordinate?(coordinate)
+    cells.key?(coordinate)
   end
 
   def place(ship, coordinates)
-    # if valid_placement
-      coordinates.each { |coordinate| cells[coordinate].place_ship(ship) }
-    # end
+      coordinates.each { |coordinate| cells[coordinate].place_ship(ship) } #if valid_placement?
   end
 
   def render(reveal_ships = false)
     board_render = "  " + ('A'..'D').to_a.join(" ") + "\n"
-    ('1'..'4').each do |row|
-      board_render += row + " " # Add row number
-      ('A'..'D').each do |column|
+    ("1".."4").each do |row|
+      board_render += row + " "
+      ("A".."D").each do |column|
         coordinate = "#{column}#{row}"
         cell = cells[coordinate]
         board_render += cell.render(reveal_ships) + " "
