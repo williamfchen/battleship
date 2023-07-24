@@ -29,7 +29,7 @@ class Game
     puts "Player Board\n"
     @player_board.render(true)
     player_place_ships
-    #computer_place_ships
+    computer_place_ships
     loop do
       player_turn
       break if game_over?
@@ -84,6 +84,28 @@ class Game
   end
 
   def computer_turn
+    puts "Computer's Turn:"
+    coordinate = generate_random_coordinate
+  
+    if @player_board.valid_coordinate?(coordinate) && !@player_board.cells[coordinate].fired_upon?
+      @player_board.cells[coordinate].fire_upon
+      @player_board.render(true)
+  
+      if @player_board.cells[coordinate].empty?
+        puts "Computer missed!"
+      else
+        puts "Computer hit your ship!"
+      end
+    else
+      computer_turn
+    end
+  end
+
+  def generate_random_coordinate
+    random_letter = ('A'..'D').to_a.sample
+    random_number = (1..4).to_a.sample
+    random_coordinate = "#{random_letter}#{random_number}"
+    random_coordinate
   end
 
   def game_over?
