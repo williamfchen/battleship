@@ -28,7 +28,7 @@ class Game
     @computer_board.render
     puts "Player Board\n"
     @player_board.render(true)
-    place_ships
+    player_place_ships
     #computer_place_ships
     loop do
       player_turn
@@ -39,7 +39,7 @@ class Game
     end
   end
 
-  def place_ships
+  def player_place_ships
     cruiser = Ship.new("Cruiser", 3)
     submarine = Ship.new("Submarine", 2)
     ships = [cruiser, submarine]
@@ -101,6 +101,5 @@ class Game
   def computer_won?
     @player_board.all_ships_sunk?
   end
-
 end
 
