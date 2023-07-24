@@ -10,7 +10,7 @@ class Game
 
   def start
     puts "Welcome to BATTLESHIP!"
-    puts "Enter p to play. Enter q to quit.\n"
+    puts "Enter p to play. Enter q to quit."
     loop do
       input = gets.chomp
       if input == "p"
@@ -29,6 +29,14 @@ class Game
     puts "Player Board\n"
     @player_board.render(true)
     place_ships
+    #computer_place_ships
+    loop do
+      player_turn
+      break if game_over?
+
+      computer_turn
+      break if game_over?
+    end
   end
 
   def place_ships
@@ -47,10 +55,51 @@ class Game
       end
     end
   end
+  
+  def computer_place_ships
+  end
 
   def get_ship_coordinates(ship)
-    puts "Enter #{ship.length} coordinates for the #{ship.name}, separated with a space:"
+    puts "Enter #{ship.length} coordinates(e.g. A1) for the #{ship.name}, separated with a space:"
     gets.chomp.split(" ")
+  end
+
+  def player_turn
+    puts "Where shall we fire, Captain?:"
+    coordinate = gets.chomp.upcase
+
+    if @computer_board.valid_coordinate?(coordinate) && !@computer_board.cells[coordinate].fired_upon?
+      @computer_board.cells[coordinate].fire_upon
+      @computer_board.render
+
+      if @computer_board.cells[coordinate].empty?
+        puts "Miss!"
+      else
+        puts "Hit!"
+      end
+    else
+      puts "Invalid or already fired-upon coordinate. Try again."
+      player_turn
+    end
+  end
+
+  def computer_turn
+  end
+
+  def game_over?
+    if player_won?
+      puts "YOU WON"
+    elsif computer_won?
+      puts "Game Over :("
+    end
+  end
+
+  def player_won?
+    @computer_board.all_ships_sunk?
+  end
+
+  def computer_won?
+    @player_board.all_ships_sunk?
   end
 
 end
