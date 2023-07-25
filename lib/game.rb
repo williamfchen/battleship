@@ -17,6 +17,7 @@ class Game
         play
       elsif input == "q"
         puts "Goodbye"
+        break
       else
         puts "Sorry, please enter either p or q"
       end
@@ -28,8 +29,8 @@ class Game
     @computer_board.render
     puts "===============Player Board= ==============\n"
     @player_board.render(true)
-    player_place_ships
     computer_place_ships
+    player_place_ships
     loop do
       player_turn
       break if game_over?
