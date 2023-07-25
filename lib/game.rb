@@ -85,7 +85,7 @@ class Game
       end
     else direction == 1
       (ship.length - 1).times do |i|
-        letter = (starting_coor[0].ord + i + 1).char
+        letter = (starting_coor[0].ord + i + 1).chr
         number = starting_coor[1]
         next_coor = "#{letter}#{number}"
         coordinates << next_coor
@@ -158,4 +158,3 @@ class Game
     @player_board.all_ships_sunk?
   end
 end
-
