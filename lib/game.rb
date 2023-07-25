@@ -52,6 +52,7 @@ class Game
         else
           puts "Invalid placement. Try again."
         end
+        break
       end
     end
   end
