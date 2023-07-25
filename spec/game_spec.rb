@@ -10,7 +10,5 @@ RSpec.describe Game do
     it 'exists' do
       expect(game).to be_a(Game)
     end
-
   end
-
 end

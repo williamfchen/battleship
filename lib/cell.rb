@@ -20,13 +20,9 @@ class Cell
   end
 
   def fire_upon
-    if @ship != nil && fired_upon? == false
-      ship.hit
-    else
-      p "You have already shot this cell"
-    end
+    ship.hit if @ship != nil && fired_upon? == false
+    p "You have already shot this cell" if @fired_upon
     @fired_upon = true
-    @ship.hit if @ship != nil
   end
 
   def render(reveal_ship = false)

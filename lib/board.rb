@@ -65,4 +65,8 @@ class Board
     end
     puts board_render
   end
+
+  def all_ships_sunk?
+    cells.values.all? { |cell| cell.empty? || cell.ship.sunk? }
+  end
 end

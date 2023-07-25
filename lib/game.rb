@@ -10,6 +10,7 @@ class Game
 
   def start
     puts "Welcome to BATTLESHIP!"
+    sleep(0.8)
     puts "Enter p to play. Enter q to quit."
     loop do
       input = gets.chomp
@@ -25,16 +26,17 @@ class Game
   end
 
   def play
-    puts "==============Computer Board==============\n"
+    system("clear")
+    puts "===========Computer Board===========\n"
     @computer_board.render
-    puts "===============Player Board= ==============\n"
+    puts "============Player Board============\n"
     @player_board.render(true)
     computer_place_ships
+    puts "The computer has placed their ships, your turn."
     player_place_ships
     loop do
       player_turn
       break if game_over?
-
       computer_turn
       break if game_over?
     end
@@ -45,15 +47,14 @@ class Game
     submarine = Ship.new("Submarine", 2)
     ships = [cruiser, submarine]
     ships.each do |ship|
-      loop do
+      (ships.length - 1).times do
         coordinates = get_ship_coordinates(ship)
         if @player_board.valid_placement?(ship, coordinates)
           @player_board.place(ship, coordinates)
-          break
+          @player_board.render(true)
         else
           puts "Invalid placement. Try again."
         end
-        break
       end
     end
   end
@@ -63,11 +64,10 @@ class Game
     submarine = Ship.new("Submarine", 2)
     ships = [cruiser, submarine]
     ships.each do |ship|
-      loop do
+      (ships.length - 1).times do
         coordinates = generate_random_coordinates_for_ship(ship)
         if @computer_board.valid_placement?(ship, coordinates)
           @computer_board.place(ship, coordinates)
-          break
         end
       end
     end
@@ -77,7 +77,6 @@ class Game
     starting_coor = generate_random_coordinate
     direction = rand(2)
     coordinates = [starting_coor]
-
     if direction == 0
       (ship.length - 1).times do |i|
         letter = starting_coor[0]
@@ -97,43 +96,40 @@ class Game
 
   def get_ship_coordinates(ship)
     puts "Enter #{ship.length} coordinates(e.g. A1) for the #{ship.name}, separated with a space:"
-    gets.chomp.split(" ")
+    gets.chomp.upcase.split(" ")
   end
 
   def player_turn
+    puts "=======Computer Board======="
+    @computer_board.render(true)
     puts "Where shall we fire, Captain?:"
     coordinate = gets.chomp.upcase
-
+    #clear
     if @computer_board.valid_coordinate?(coordinate) && !@computer_board.cells[coordinate].fired_upon?
       @computer_board.cells[coordinate].fire_upon
-      @computer_board.render
-
       if @computer_board.cells[coordinate].empty?
-        puts "Miss!"
+        puts "---Miss!---"
       else
-        puts "Hit!"
+        puts "+++Hit!+++"
       end
     else
       puts "Invalid or already fired-upon coordinate. Try again."
       player_turn
     end
   end
-
+  
   def computer_turn
     puts "Computer's Turn:"
     coordinate = generate_random_coordinate
-  
     if @player_board.valid_coordinate?(coordinate) && !@player_board.cells[coordinate].fired_upon?
       @player_board.cells[coordinate].fire_upon
+      puts "=======Your Board======="
       @player_board.render(true)
-  
       if @player_board.cells[coordinate].empty?
         puts "Computer missed!"
       else
         puts "Computer hit your ship!"
       end
-    else
-      computer_turn
     end
   end
 

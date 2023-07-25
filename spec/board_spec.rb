@@ -76,4 +76,30 @@ RSpec.describe Board do
       @board.render
     end
   end
+
+  describe '#all_ships_sunk' do
+    before(:each) do
+      @board.place(@cruiser, ["A1", "A2", "A3"])
+      @cell_1 = @board.cells["A1"]
+      @cell_2 = @board.cells["A2"]
+      @cell_3 = @board.cells["A3"]
+      @board.place(@submarine, ["D2", "D3"])
+      @cell_4 = @board.cells["D2"]
+      @cell_5 = @board.cells["D3"]
+      @cell_2.fire_upon
+      @cell_3.fire_upon
+      @cell_4.fire_upon
+    end
+    
+    it 'recognizes when are ships are sunk' do
+      expect(@cruiser.sunk?).to be false
+      expect(@submarine.sunk?).to be false
+      expect(@board.all_ships_sunk?).to be false
+      @cell_1.fire_upon
+      @cell_5.fire_upon
+      expect(@cruiser.sunk?).to be true
+      expect(@submarine.sunk?).to be true
+      expect(@board.all_ships_sunk?).to be true
+    end
+  end
 end
