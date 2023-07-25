@@ -24,9 +24,9 @@ class Game
   end
 
   def play
-    puts "Computer Board\n"
+    puts "==============Computer Board==============\n"
     @computer_board.render
-    puts "Player Board\n"
+    puts "===============Player Board= ==============\n"
     @player_board.render(true)
     player_place_ships
     computer_place_ships
@@ -56,11 +56,6 @@ class Game
     end
   end
   
-  def get_ship_coordinates(ship)
-    puts "Enter #{ship.length} coordinates(e.g. A1) for the #{ship.name}, separated with a space:"
-    gets.chomp.split(" ")
-  end
-
   def computer_place_ships
     cruiser = Ship.new("Cruiser", 3)
     submarine = Ship.new("Submarine", 2)
@@ -82,10 +77,25 @@ class Game
     coordinates = [starting_coor]
 
     if direction == 0
-      (ship.length - 1).times do |coor|
-        
+      (ship.length - 1).times do |i|
+        letter = starting_coor[0]
+        number = starting_coor[1].to_i + i + 1
+        next_coor = "#{letter}#{number}"
+        coordinates << next_coor
+      end
+    else direction == 1
+      (ship.length - 1).times do |i|
+        letter = (starting_coor[0].ord + i + 1).char
+        number = starting_coor[1]
+        next_coor = "#{letter}#{number}"
+        coordinates << next_coor
       end
     end
+  end
+
+  def get_ship_coordinates(ship)
+    puts "Enter #{ship.length} coordinates(e.g. A1) for the #{ship.name}, separated with a space:"
+    gets.chomp.split(" ")
   end
 
   def player_turn
