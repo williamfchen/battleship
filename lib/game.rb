@@ -47,11 +47,12 @@ class Game
     submarine = Ship.new("Submarine", 2)
     ships = [cruiser, submarine]
     ships.each do |ship|
-      (ships.length - 1).times do
+      loop do
         coordinates = get_ship_coordinates(ship)
         if @player_board.valid_placement?(ship, coordinates)
           @player_board.place(ship, coordinates)
           @player_board.render(true)
+          break
         else
           puts "Invalid placement. Try again."
         end
@@ -141,11 +142,8 @@ class Game
   end
 
   def game_over?
-    if player_won?
-      puts "YOU WON"
-    elsif computer_won?
-      puts "Game Over :("
-    end
+    return false unless player_won? || computer_won?
+    true
   end
 
   def player_won?
