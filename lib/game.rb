@@ -84,7 +84,6 @@ class Game
     coordinates = [starting_coor]
     if direction == 0
       (ship.length - 1).times do |i|
-
         letter = starting_coor[0]
         number = starting_coor[1].to_i + i + 1
         next_coor = "#{letter}#{number}"
@@ -113,7 +112,6 @@ class Game
     @computer_board.render(true)
     puts "Where shall we fire, Captain?:"
     coordinate = gets.chomp.upcase
-    #clear
     if @computer_board.valid_coordinate?(coordinate) && !@computer_board.cells[coordinate].fired_upon?
       @computer_board.cells[coordinate].fire_upon
       if @computer_board.cells[coordinate].empty?
