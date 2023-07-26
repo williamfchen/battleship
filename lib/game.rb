@@ -66,10 +66,12 @@ class Game
     ships = [cruiser, submarine]
     ships.each do |ship|
       (ships.length - 1).times do
-        coordinates = generate_random_coordinates_for_ship(ship)
-        if @computer_board.valid_placement?(ship, coordinates)
-          @computer_board.place(ship, coordinates)
+        coordinates = generate_random_coordinates_for_ship(ship) 
+        until @computer_board.valid_placement?(ship, coordinates)
+          coordinates = generate_random_coordinates_for_ship(ship)
         end
+        require 'pry';binding.pry
+        @computer_board.place(ship, coordinates)
       end
     end
   end
@@ -93,6 +95,7 @@ class Game
         coordinates << next_coor
       end
     end
+    coordinates
   end
 
   def get_ship_coordinates(ship)
@@ -135,10 +138,12 @@ class Game
   end
 
   def generate_random_coordinate
-    random_letter = ('A'..'D').to_a.sample
-    random_number = (1..4).to_a.sample
-    random_coordinate = "#{random_letter}#{random_number}"
+    # random_letter = ('A'..'D').to_a.sample #board.cells.keys.sample also works
+    # random_number = (1..4).to_a.sample
+    # random_coordinate = "#{random_letter}#{random_number}"
+    random_coordinate = @player_board.cells.keys.sample
     random_coordinate
+    require 'pry';binding.pry
   end
 
   def game_over?
