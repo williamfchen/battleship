@@ -166,7 +166,7 @@ class Game
     if @targeting_mode == true
       adjacent_cells = find_adjacent(@last_hit)
       coordinate = adjacent_cells.sample unless adjacent_cells.empty?
-      @targeting_mode = false if coordinate.nil? || @player_board.cells[coordinate].fired_upon?
+      @targeting_mode = false if coordinate.nil? || @player_board.cells[coordinate].fired_upon? || (@player_board.cells[coordinate].ship && @player_board.cells[coordinate].ship.sunk?)    
     else
       coordinate = generate_random_coordinate
     end
