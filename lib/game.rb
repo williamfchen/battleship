@@ -28,20 +28,29 @@ class Game
   end
 
   def play
-    system("clear")
-    puts "===========Computer Board===========\n"
-    @computer_board.render
-    puts "============Player Board============\n"
-    @player_board.render(true)
-    computer_place_ships
-    puts "The computer has placed their ships, your turn."
-    player_place_ships
     loop do
-      player_turn
-      break if game_over?
-      computer_turn
-      break if game_over?
+      system("clear")
+      puts "===========Computer Board===========\n"
+      @computer_board.render
+      puts "============Player Board============\n"
+      @player_board.render(true)
+      computer_place_ships
+      puts "The computer has placed their ships, your turn."
+      player_place_ships
+      loop do
+        player_turn
+        break if game_over?
+        computer_turn
+        break if game_over?
+      end
+      break unless play_again?  
     end
+  end
+
+  def play_again?
+    puts "Do you want to play again? (p/q):"
+    input = gets.chomp.downcase
+    input == "p"
   end
 
   def player_place_ships
@@ -74,6 +83,7 @@ class Game
         end
         # require 'pry';binding.pry
         @computer_board.place(ship, coordinates)
+        puts "Placed #{ship.name} at coordinates: #{coordinates}"
       end
     end
   end
@@ -89,7 +99,7 @@ class Game
         next_coor = "#{letter}#{number}"
         coordinates << next_coor
       end
-    else direction == 1
+    elsif direction == 1
       (ship.length - 1).times do
         letter = (starting_coor[0].ord + 1).chr
         number = starting_coor[1]
@@ -106,13 +116,15 @@ class Game
   end
 
   def player_turn
-    sleep(0.8)
+    sleep(1)
     system("clear")
     puts "=======Computer Board======="
     @computer_board.render(true)
+    puts "\n" + "=======Player Board======="
+    @player_board.render(true)
     puts "Where shall we fire, Captain?:"
     coordinate = gets.chomp.upcase
-    if @computer_board.valid_coordinate?(coordinate) && !@computer_board.cells[coordinate].fired_upon?
+    # if @computer_board.valid_coordinate?(coordinate) && !@computer_board.cells[coordinate].fired_upon?
       @computer_board.cells[coordinate].fire_upon
       if @computer_board.cells[coordinate].empty?
         miss = File.open("./lib/ascii_art/miss.txt")
@@ -121,10 +133,10 @@ class Game
         hit = File.open("./lib/ascii_art/hit.txt")
         puts hit.read
       end
-    else
-      puts "Invalid or already fired-upon coordinate. Try again."
-      player_turn
-    end
+    # else
+    #   puts "Invalid or already fired-upon coordinate. Try again."
+    #   player_turn
+    # end
   end
   
   def computer_turn

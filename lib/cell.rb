@@ -20,8 +20,11 @@ class Cell
   end
 
   def fire_upon
-    ship.hit if @ship != nil && fired_upon? == false
-    p "You have already shot this cell" if @fired_upon
+    if @ship != nil && fired_upon? == false
+      ship.hit 
+    elsif @fired_upon == true
+      puts "You have already shot this cell" 
+    end
     @fired_upon = true
   end
 
