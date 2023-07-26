@@ -17,13 +17,13 @@ class Board
   end
 
   def valid_coordinate?(coordinate)
-    cells.key?(coordinate) && cells[coordinate].empty?
+    cells.key?(coordinate)
   end
 
   def valid_placement?(ship, coordinates)
     return false unless ship.is_a?(Ship) && coordinates.is_a?(Array) && coordinates.length == ship.length
     return false unless coordinates.all? do |coor|
-      valid_coordinate?(coor)
+      valid_coordinate?(coor) && cells[coor].empty?
     end
     consecutive?(coordinates)
   end
