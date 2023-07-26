@@ -7,8 +7,10 @@ class Game
     @player_board = Board.new
     @computer_board = Board.new
   end
-
+  
   def start
+    title = File.open("./lib/ascii_art/title.txt")
+    puts title.read
     puts "Welcome to BATTLESHIP!"
     sleep(0.8)
     puts "Enter p to play. Enter q to quit."
@@ -66,10 +68,12 @@ class Game
     ships = [cruiser, submarine]
     ships.each do |ship|
       (ships.length - 1).times do
-        coordinates = generate_random_coordinates_for_ship(ship)
-        if @computer_board.valid_placement?(ship, coordinates)
-          @computer_board.place(ship, coordinates)
+        coordinates = generate_random_coordinates_for_ship(ship) 
+        until @computer_board.valid_placement?(ship, coordinates)
+          coordinates = generate_random_coordinates_for_ship(ship)
         end
+        # require 'pry';binding.pry
+        @computer_board.place(ship, coordinates)
       end
     end
   end
@@ -86,13 +90,14 @@ class Game
         coordinates << next_coor
       end
     else direction == 1
-      (ship.length - 1).times do |i|
-        letter = (starting_coor[0].ord + i + 1).chr
+      (ship.length - 1).times do
+        letter = (starting_coor[0].ord + 1).chr
         number = starting_coor[1]
         next_coor = "#{letter}#{number}"
         coordinates << next_coor
       end
     end
+    coordinates
   end
 
   def get_ship_coordinates(ship)
@@ -101,17 +106,20 @@ class Game
   end
 
   def player_turn
+    sleep(0.8)
+    system("clear")
     puts "=======Computer Board======="
     @computer_board.render(true)
     puts "Where shall we fire, Captain?:"
     coordinate = gets.chomp.upcase
-    #clear
     if @computer_board.valid_coordinate?(coordinate) && !@computer_board.cells[coordinate].fired_upon?
       @computer_board.cells[coordinate].fire_upon
       if @computer_board.cells[coordinate].empty?
-        puts "---Miss!---"
+        miss = File.open("./lib/ascii_art/miss.txt")
+        puts miss.read
       else
-        puts "+++Hit!+++"
+        hit = File.open("./lib/ascii_art/hit.txt")
+        puts hit.read
       end
     else
       puts "Invalid or already fired-upon coordinate. Try again."
@@ -120,25 +128,26 @@ class Game
   end
   
   def computer_turn
+    sleep(0.8)
+    system("clear")
     puts "Computer's Turn:"
     coordinate = generate_random_coordinate
-    if @player_board.valid_coordinate?(coordinate) && !@player_board.cells[coordinate].fired_upon?
+    if !@player_board.cells[coordinate].fired_upon?
       @player_board.cells[coordinate].fire_upon
       puts "=======Your Board======="
       @player_board.render(true)
       if @player_board.cells[coordinate].empty?
         puts "Computer missed!"
+        sleep(0.9)
       else
         puts "Computer hit your ship!"
+        sleep(0.9)
       end
     end
   end
 
   def generate_random_coordinate
-    random_letter = ('A'..'D').to_a.sample
-    random_number = (1..4).to_a.sample
-    random_coordinate = "#{random_letter}#{random_number}"
-    random_coordinate
+    @player_board.cells.keys.sample
   end
 
   def game_over?
@@ -147,10 +156,12 @@ class Game
   end
 
   def player_won?
-    @computer_board.all_ships_sunk?
+    victory = File.open("./lib/ascii_art/victory.txt")
+    puts victory.read if @computer_board.all_ships_sunk?
   end
 
   def computer_won?
-    @player_board.all_ships_sunk?
+    game_over = File.open("./lib/ascii_art/game_over.txt")
+    puts game_over.read if @player_board.all_ships_sunk?
   end
 end
