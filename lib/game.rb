@@ -70,7 +70,7 @@ class Game
         until @computer_board.valid_placement?(ship, coordinates)
           coordinates = generate_random_coordinates_for_ship(ship)
         end
-        require 'pry';binding.pry
+        # require 'pry';binding.pry
         @computer_board.place(ship, coordinates)
       end
     end
@@ -82,14 +82,15 @@ class Game
     coordinates = [starting_coor]
     if direction == 0
       (ship.length - 1).times do |i|
+
         letter = starting_coor[0]
         number = starting_coor[1].to_i + i + 1
         next_coor = "#{letter}#{number}"
         coordinates << next_coor
       end
     else direction == 1
-      (ship.length - 1).times do |i|
-        letter = (starting_coor[0].ord + i + 1).chr
+      (ship.length - 1).times do
+        letter = (starting_coor[0].ord + 1).chr
         number = starting_coor[1]
         next_coor = "#{letter}#{number}"
         coordinates << next_coor
@@ -125,7 +126,7 @@ class Game
   def computer_turn
     puts "Computer's Turn:"
     coordinate = generate_random_coordinate
-    if @player_board.valid_coordinate?(coordinate) && !@player_board.cells[coordinate].fired_upon?
+    if !@player_board.cells[coordinate].fired_upon?
       @player_board.cells[coordinate].fire_upon
       puts "=======Your Board======="
       @player_board.render(true)
@@ -138,12 +139,7 @@ class Game
   end
 
   def generate_random_coordinate
-    # random_letter = ('A'..'D').to_a.sample #board.cells.keys.sample also works
-    # random_number = (1..4).to_a.sample
-    # random_coordinate = "#{random_letter}#{random_number}"
-    random_coordinate = @player_board.cells.keys.sample
-    random_coordinate
-    require 'pry';binding.pry
+    @player_board.cells.keys.sample
   end
 
   def game_over?
