@@ -22,27 +22,38 @@ class Game
         puts "Goodbye"
         break
       else
-        puts "Sorry, please enter either p or q"
+        puts "Please enter either p or q"
       end
     end
   end
 
   def play
-    system("clear")
-    puts "===========Computer Board===========\n"
-    @computer_board.render
-    puts "============Player Board============\n"
-    @player_board.render(true)
-    computer_place_ships
-    puts "The computer has placed their ships, your turn."
-    player_place_ships
-    loop do
-      player_turn
-      break if game_over?
-      computer_turn
-      break if game_over?
-    end
+    # loop do
+      system("clear")
+      # puts "===========Computer Board===========\n"
+      # @computer_board.render
+      puts "The computer has placed their ships, your turn."
+      puts "============Player Board============\n"
+      @player_board.render(true)
+      computer_place_ships
+      player_place_ships
+      system("clear")
+      loop do
+        player_turn
+        break if game_over?
+        computer_turn
+        break if game_over?
+      end
+    #   break unless play_again?  
+    # end
   end
+
+  # def play_again?
+  #   puts "Do you want to play again? (p/q):"
+  #   input = gets.chomp.downcase
+  #   return false if input == "q"
+  #   input == "p"
+  # end
 
   def player_place_ships
     cruiser = Ship.new("Cruiser", 3)
@@ -51,8 +62,10 @@ class Game
     ships.each do |ship|
       loop do
         coordinates = get_ship_coordinates(ship)
+        system("clear")
         if @player_board.valid_placement?(ship, coordinates)
           @player_board.place(ship, coordinates)
+          puts "============Player Board============\n"
           @player_board.render(true)
           break
         else
@@ -72,7 +85,6 @@ class Game
         until @computer_board.valid_placement?(ship, coordinates)
           coordinates = generate_random_coordinates_for_ship(ship)
         end
-        # require 'pry';binding.pry
         @computer_board.place(ship, coordinates)
       end
     end
@@ -89,7 +101,7 @@ class Game
         next_coor = "#{letter}#{number}"
         coordinates << next_coor
       end
-    else direction == 1
+    elsif direction == 1
       (ship.length - 1).times do
         letter = (starting_coor[0].ord + 1).chr
         number = starting_coor[1]
@@ -106,42 +118,64 @@ class Game
   end
 
   def player_turn
-    sleep(0.8)
-    system("clear")
-    puts "=======Computer Board======="
-    @computer_board.render(true)
+    full_render
     puts "Where shall we fire, Captain?:"
     coordinate = gets.chomp.upcase
-    if @computer_board.valid_coordinate?(coordinate) && !@computer_board.cells[coordinate].fired_upon?
+    if @computer_board.valid_coordinate?(coordinate)
       @computer_board.cells[coordinate].fire_upon
       if @computer_board.cells[coordinate].empty?
+        system("clear")
         miss = File.open("./lib/ascii_art/miss.txt")
         puts miss.read
       else
-        hit = File.open("./lib/ascii_art/hit.txt")
-        puts hit.read
+        system("clear")
+        if @computer_board.cells[coordinate].ship.sunk?
+          #ascii???
+          puts "You sunk their battleship!"
+        else
+          hit = File.open("./lib/ascii_art/hit.txt")
+          puts hit.read
+        end
       end
+    elsif @player_board.cells[coordinate].fired_upon?
+      system("clear")
+      puts "Already fired on that coordinate. Try again."
+      player_turn
     else
-      puts "Invalid or already fired-upon coordinate. Try again."
+      system("clear")
+      puts "Invalid coordinate. Try again."
       player_turn
     end
   end
   
+  def full_render
+    puts "=======Computer Board======="
+    @computer_board.render(true)
+    puts "\n" + "=======Player Board======="
+    @player_board.render(true)
+  end
+  
   def computer_turn
     sleep(0.8)
-    system("clear")
+    # system("clear")
     puts "Computer's Turn:"
     coordinate = generate_random_coordinate
     if !@player_board.cells[coordinate].fired_upon?
       @player_board.cells[coordinate].fire_upon
-      puts "=======Your Board======="
-      @player_board.render(true)
+      # puts "=======Your Board======="
+      # @player_board.render(true)
       if @player_board.cells[coordinate].empty?
         puts "Computer missed!"
-        sleep(0.9)
+        sleep(0.5)
       else
-        puts "Computer hit your ship!"
-        sleep(0.9)
+        if @player_board.cells[coordinate].ship.sunk?
+          #ascii???
+          puts "Computer sunk your battleship!"
+        else
+          #ascii???
+          puts "Computer hit your ship!"
+        end
+        sleep(0.5)
       end
     end
   end
@@ -158,10 +192,12 @@ class Game
   def player_won?
     victory = File.open("./lib/ascii_art/victory.txt")
     puts victory.read if @computer_board.all_ships_sunk?
+    @computer_board.all_ships_sunk?
   end
 
   def computer_won?
     game_over = File.open("./lib/ascii_art/game_over.txt")
     puts game_over.read if @player_board.all_ships_sunk?
+    @computer_board.all_ships_sunk?
   end
 end

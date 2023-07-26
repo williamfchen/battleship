@@ -15,22 +15,22 @@ RSpec.describe Cell do
       expect(cell.ship).to be nil
     end
 
-    it '.empty?' do
+    it 'checks if its empty' do
       expect(cell.empty?).to be true
     end
 
-    it '.place_ship' do
+    it 'places a ship' do
       cell.place_ship(cruiser)
       expect(cell.ship).to eq(cruiser)
       expect(cell.empty?).to be false
     end
 
-    it '.fired_upon?' do
+    it 'can tell if its been fired on' do
       cell.place_ship(cruiser)
       expect(cell.fired_upon?).to be false
     end
 
-    it '.fire_upon' do
+    it 'fires on a cell' do
       cell.place_ship(cruiser)
       cell.fire_upon
       expect(cell.ship.health).to eq(2)
@@ -39,7 +39,7 @@ RSpec.describe Cell do
   end
   
   describe "iteration 1.5" do
-    it '.render' do
+    it 'renders the board' do
       cell_1 = Cell.new("B4")
       expect(cell_1.render).to eq(".")
       cell_1.fire_upon
