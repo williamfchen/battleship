@@ -164,7 +164,8 @@ class Game
     sleep(0.8)
     puts "Computer's Turn:"
     if @targeting_mode == true
-      coordinate = find_adjacent(@last_hit).sample
+      adjacent_cells = find_adjacent(@last_hit)
+      coordinate = adjacent_cells.sample unless adjacent_cells.empty?
       @targeting_mode = false if coordinate.nil? || @player_board.cells[coordinate].fired_upon?
     else
       coordinate = generate_random_coordinate
@@ -207,7 +208,7 @@ class Game
       adjacent_coordinate = "#{letter}#{number - 1}"
       adjacent_cells << adjacent_coordinate if @player_board.valid_coordinate?(adjacent_coordinate) && !@player_board.cells[adjacent_coordinate].fired_upon?
     end
-    if number < @player_board.size
+    if number < 8
       adjacent_coordinate = "#{letter}#{number + 1}"
       adjacent_cells << adjacent_coordinate if @player_board.valid_coordinate?(adjacent_coordinate) && !@player_board.cells[adjacent_coordinate].fired_upon?
     end
