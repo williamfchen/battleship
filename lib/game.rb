@@ -9,6 +9,7 @@ class Game
   end
   
   def start
+    system("clear")
     title = File.open("./lib/ascii_art/title.txt")
     puts title.read
     puts "Welcome to BATTLESHIP!"
@@ -28,10 +29,8 @@ class Game
   end
 
   def play
-    # loop do
+    loop do
       system("clear")
-      # puts "===========Computer Board===========\n"
-      # @computer_board.render
       puts "The computer has placed their ships, your turn."
       puts "============Player Board============\n"
       @player_board.render(true)
@@ -44,16 +43,19 @@ class Game
         computer_turn
         break if game_over?
       end
-    #   break unless play_again?  
-    # end
+      break unless play_again?  
+    end
   end
 
-  # def play_again?
-  #   puts "Do you want to play again? (p/q):"
-  #   input = gets.chomp.downcase
-  #   return false if input == "q"
-  #   input == "p"
-  # end
+  def play_again?
+    puts "Do you want to play again? (p/q):"
+    input = gets.chomp.downcase
+    exit if input == "q"
+    if input == "p"
+      new_game = Game.new
+      new_game.start
+    end
+  end
 
   def player_place_ships
     cruiser = Ship.new("Cruiser", 3)
@@ -121,7 +123,7 @@ class Game
     full_render
     puts "Where shall we fire, Captain?:"
     coordinate = gets.chomp.upcase
-    if @computer_board.valid_coordinate?(coordinate)
+    if @computer_board.valid_coordinate?(coordinate) && !@computer_board.cells[coordinate].fired_upon?
       @computer_board.cells[coordinate].fire_upon
       if @computer_board.cells[coordinate].empty?
         system("clear")
@@ -138,7 +140,7 @@ class Game
           puts hit.read
         end
       end
-    elsif @player_board.cells[coordinate].fired_upon?
+    elsif @computer_board.valid_coordinate?(coordinate) && @computer_board.cells[coordinate].fired_upon?
       system("clear")
       puts "Already fired on that coordinate. Try again."
       player_turn
@@ -158,20 +160,18 @@ class Game
   
   def computer_turn
     sleep(0.8)
-    # system("clear")
     puts "Computer's Turn:"
     coordinate = generate_random_coordinate
     if !@player_board.cells[coordinate].fired_upon?
       @player_board.cells[coordinate].fire_upon
-      # puts "=======Your Board======="
-      # @player_board.render(true)
       if @player_board.cells[coordinate].empty?
         puts "Computer fired at #{coordinate} and missed!"
         sleep(0.5)
       else
         if @player_board.cells[coordinate].ship.sunk?
-          #ascii???
           puts "Computer sunk your battleship!"
+          sunk = File.open("./lib/ascii_art/sunk.txt")
+          puts sunk.read 
         else
           puts "Computer hit your ship at #{coordinate}!"
           danger = File.open("./lib/ascii_art/danger.txt")
