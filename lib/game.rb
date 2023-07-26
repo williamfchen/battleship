@@ -153,7 +153,7 @@ class Game
   
   def full_render
     puts "=======Computer Board======="
-    @computer_board.render(true)
+    @computer_board.render
     puts "\n" + "=======Player Board======="
     @player_board.render(true)
   end
