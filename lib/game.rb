@@ -130,8 +130,9 @@ class Game
       else
         system("clear")
         if @computer_board.cells[coordinate].ship.sunk?
-          #ascii???
           puts "You sunk their battleship!"
+          sunk = File.open("./lib/ascii_art/sunk.txt")
+          puts sunk.read  
         else
           hit = File.open("./lib/ascii_art/hit.txt")
           puts hit.read
@@ -165,17 +166,18 @@ class Game
       # puts "=======Your Board======="
       # @player_board.render(true)
       if @player_board.cells[coordinate].empty?
-        puts "Computer missed!"
+        puts "Computer fired at #{coordinate} and missed!"
         sleep(0.5)
       else
         if @player_board.cells[coordinate].ship.sunk?
           #ascii???
           puts "Computer sunk your battleship!"
         else
-          #ascii???
-          puts "Computer hit your ship!"
+          puts "Computer hit your ship at #{coordinate}!"
+          danger = File.open("./lib/ascii_art/danger.txt")
+          puts danger.read if @computer_board.all_ships_sunk?      
         end
-        sleep(0.5)
+        sleep(0.8)
       end
     end
   end
