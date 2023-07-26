@@ -49,7 +49,7 @@ class Board
   end
 
   def place(ship, coordinates)
-    coordinates.each { |coordinate| cells[coordinate].place_ship(ship) } if coordinates.all? { |coordinate| valid_coordinate?(coordinate) }
+    coordinates.each { |coordinate| cells[coordinate].place_ship(ship) } if valid_placement?(ship, coordinates)
   end
 
   def render(reveal_ships = false)
