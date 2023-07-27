@@ -163,15 +163,25 @@ class Game
   def computer_turn
     sleep(0.8)
     puts "Computer's Turn:"
+
+    coordinate = nil
+    # loop do
+    #   coordinate = generate_random_coordinate
+    #   break if @player_board.valid_coordinate?(coordinate) && !@player_board.cells[coordinate].fired_upon?
+    # end
+
     if @targeting_mode == true
       adjacent_cells = find_adjacent(@last_hit)
       coordinate = adjacent_cells.sample unless adjacent_cells.empty?
       @targeting_mode = false if coordinate.nil? || @player_board.cells[coordinate].fired_upon? || (@player_board.cells[coordinate].ship && @player_board.cells[coordinate].ship.sunk?)    
     else
-      coordinate = generate_random_coordinate
+      loop do
+        coordinate = generate_random_coordinate
+        break if @player_board.valid_coordinate?(coordinate) && !@player_board.cells[coordinate].fired_upon?
+      end
+      # coordinate = generate_random_coordinate
     end
     
-    # coordinate = generate_random_coordinate
     if !@player_board.cells[coordinate].fired_upon?
       @player_board.cells[coordinate].fire_upon
       if @player_board.cells[coordinate].empty?
