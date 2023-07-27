@@ -6,6 +6,8 @@ class Game
   def initialize
     @player_board = Board.new
     @computer_board = Board.new
+    @targeting_mode = false
+    @last_hit = nil
   end
   
   def start
@@ -161,7 +163,25 @@ class Game
   def computer_turn
     sleep(0.8)
     puts "Computer's Turn:"
-    coordinate = generate_random_coordinate
+
+    coordinate = nil
+    # loop do
+    #   coordinate = generate_random_coordinate
+    #   break if @player_board.valid_coordinate?(coordinate) && !@player_board.cells[coordinate].fired_upon?
+    # end
+
+    if @targeting_mode == true
+      adjacent_cells = find_adjacent(@last_hit)
+      coordinate = adjacent_cells.sample unless adjacent_cells.empty?
+      @targeting_mode = false if coordinate.nil? || @player_board.cells[coordinate].fired_upon? || (@player_board.cells[coordinate].ship && @player_board.cells[coordinate].ship.sunk?)    
+    else
+      loop do
+        coordinate = generate_random_coordinate
+        break if @player_board.valid_coordinate?(coordinate) && !@player_board.cells[coordinate].fired_upon?
+      end
+      # coordinate = generate_random_coordinate
+    end
+    
     if !@player_board.cells[coordinate].fired_upon?
       @player_board.cells[coordinate].fire_upon
       if @player_board.cells[coordinate].empty?
@@ -172,10 +192,13 @@ class Game
           puts "Computer sunk your battleship!"
           sunk = File.open("./lib/ascii_art/sunk.txt")
           puts sunk.read 
+          @targeting_mode = false
         else
           puts "Computer hit your ship at #{coordinate}!"
+          @targeting_mode = true
+          @last_hit = coordinate
           danger = File.open("./lib/ascii_art/danger.txt")
-          puts danger.read if @computer_board.all_ships_sunk?      
+          puts danger.read if @computer_board.all_ships_sunk?
         end
         sleep(0.8)
       end
@@ -184,6 +207,30 @@ class Game
 
   def generate_random_coordinate
     @player_board.cells.keys.sample
+  end
+
+  def find_adjacent(coordinate)
+    letter = coordinate[0]
+    number = coordinate[1].to_i
+    adjacent_cells = []
+
+    if number > 1
+      adjacent_coordinate = "#{letter}#{number - 1}"
+      adjacent_cells << adjacent_coordinate if @player_board.valid_coordinate?(adjacent_coordinate) && !@player_board.cells[adjacent_coordinate].fired_upon?
+    end
+    if number < 8
+      adjacent_coordinate = "#{letter}#{number + 1}"
+      adjacent_cells << adjacent_coordinate if @player_board.valid_coordinate?(adjacent_coordinate) && !@player_board.cells[adjacent_coordinate].fired_upon?
+    end
+    if letter.ord > 65
+      adjacent_coordinate = "#{(letter.ord - 1).chr}#{number}"
+      adjacent_cells << adjacent_coordinate if @player_board.valid_coordinate?(adjacent_coordinate) && !@player_board.cells[adjacent_coordinate].fired_upon?
+    end
+    if letter.ord < 74
+      adjacent_coordinate = "#{(letter.ord + 1).chr}#{number}"
+      adjacent_cells << adjacent_coordinate if @player_board.valid_coordinate?(adjacent_coordinate) && !@player_board.cells[adjacent_coordinate].fired_upon?
+    end
+    adjacent_cells
   end
 
   def game_over?
